@@ -8,5 +8,20 @@ version = "0.1.0"
 description = "Reconstructed academic assistive computer vision pipeline"
 requires-python = ">=3.11"
 
+[project.optional-dependencies]
+vision = [
+    "numpy>=1.24,<3",
+    "opencv-python>=4.8,<5",
+    "face-recognition==1.3.0",
+    "pyzbar==0.1.9",
+]
+
+[project.scripts]
+assistive-vision = "assistive_vision.app:main"
+assistive-enroll = "assistive_vision.enroll:main"
+
+[project.urls]
+Repository = "https://github.com/PrashantSinghpns/assistive-vision-smart-glasses"
+
 [tool.setuptools.packages.find]
 where = ["src"]

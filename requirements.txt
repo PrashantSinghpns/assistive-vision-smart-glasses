@@ -1,5 +1,2 @@
-# Candidate dependency ranges; resolve and lock after target-device validation.
-numpy>=1.24,<3
-opencv-python>=4.8,<5
-face-recognition==1.3.0
-pyzbar==0.1.9
+# Dependency definitions live in pyproject.toml.
+-e .[vision]

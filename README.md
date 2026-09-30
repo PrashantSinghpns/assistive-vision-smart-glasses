@@ -1,5 +1,7 @@
 # Assistive Vision Smart Glasses
 
+[![Reference checks](https://github.com/PrashantSinghpns/assistive-vision-smart-glasses/actions/workflows/ci.yml/badge.svg)](https://github.com/PrashantSinghpns/assistive-vision-smart-glasses/actions/workflows/ci.yml)
+
 **Computer vision for accessible interaction: face identification, QR decoding, proximity awareness, and spoken feedback on Raspberry Pi.**
 
 Academic project by **Prashant Singh, Rishabh Raj, and Vardaan Sharma**, supervised by **Dr. Arun Kumar G.**, JSS Academy of Technical Education, Noida (June 2025).
@@ -47,13 +49,14 @@ The reconstructed application uses one camera stream and shares frames between f
 - `src/assistive_vision/enroll.py`: enrollment image validation and embedding export.
 - `src/assistive_vision/app.py`: live camera inference and optional offline speech.
 - `src/assistive_vision/matching.py`: identity selection and distance threshold rejection.
-- `tests/`: matching and input validation checks.
+- `src/assistive_vision/gallery.py`: gallery schema and biometric vector validation.
+- `tests/`: matching, gallery validation, CLI, and simulated camera lifecycle checks.
 - `docs/`: architecture, evaluation protocol, hardware integration, and source traceability.
 - `.github/workflows/ci.yml`: syntax and dependency-free unit checks.
 
 ## Local setup
 
-Use an isolated Python environment. The target Python version for this reference implementation is 3.11; dependency installation and camera behavior still require validation on your machine.
+Use Python 3.11 for the camera implementation. Core checks cover Python 3.11–3.13; native vision dependency installation and camera behavior still require validation on your machine.
 
 ```bash
 python -m venv .venv
@@ -61,11 +64,20 @@ python -m venv .venv
 source .venv/bin/activate
 # Windows PowerShell
 # .venv/Scripts/Activate.ps1
-python -m pip install -r requirements.txt
-python -m pip install -e . --no-deps
+python -m pip install -e ".[vision]"
 ```
 
 The vision dependencies require native dlib support and a ZBar installation. On Raspberry Pi/Linux, install the distribution packages for ZBar and eSpeak, plus dlib build prerequisites if a compatible wheel is unavailable. USB cameras exposed through OpenCV are the initial capture target; CSI camera support requires a suitable capture adapter.
+
+For a lightweight code review and tests without installing native vision libraries:
+
+```bash
+python -m pip install -e .
+python -m unittest discover -s tests -v
+assistive-vision --help
+```
+
+See [troubleshooting](docs/TROUBLESHOOTING.md) for dependency, camera, audio, and gallery errors.
 
 ## Enrollment and inference
 
@@ -87,9 +99,11 @@ python -m assistive_vision.enroll --dataset data/enrollment --output models/iden
 python -m assistive_vision.app --gallery models/identities.json --camera 0
 # Enable offline audio when eSpeak is installed:
 python -m assistive_vision.app --gallery models/identities.json --camera 0 --speak
+# Raspberry Pi over SSH; bounded camera smoke check:
+assistive-vision --gallery models/identities.json --headless --max-frames 100
 ```
 
-Press `q` to exit. `--threshold` is a maximum embedding distance, not a probability. The default 0.6 is a starting parameter requiring calibration; it is not a measured optimal threshold. `--cooldown` controls repeat announcements.
+Press `q` to exit the preview or Ctrl+C in headless mode. `--threshold` is a maximum embedding distance, not a probability. The default 0.6 is a starting parameter requiring calibration; it is not a measured optimal threshold. `--cooldown` controls repeat announcements. Install distribution-level display libraries where needed even when using the headless option; the vision extra includes the standard OpenCV package.
 
 ## Results and reproducibility
 

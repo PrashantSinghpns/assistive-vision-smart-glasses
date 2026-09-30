@@ -23,6 +23,17 @@ class MatchingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             match_identity([float("nan")] * 128, [])
 
+    def test_threshold_boundary(self):
+        records = [{"name": "A", "embedding": [0.0] * 128}]
+        query = [0.6] + [0.0] * 127
+        self.assertEqual(match_identity(query, records, 0.6)[0], "A")
+        self.assertEqual(match_identity(query, records, 0.59)[0], "Unknown")
+
+    def test_invalid_threshold(self):
+        for threshold in [0, -1, float("nan"), float("inf")]:
+            with self.subTest(threshold=threshold), self.assertRaises(ValueError):
+                match_identity([0.0] * 128, [], threshold)
+
 
 if __name__ == "__main__":
     unittest.main()

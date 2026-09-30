@@ -23,4 +23,4 @@ The report also discusses 85% confidence and 60–70% thresholds. Its provided e
 6. Evaluate QR success rate across payload types, lighting, angles, and distances. Report ultrasonic error against a reference distance with sensor timeout events.
 7. Publish aggregate results and reproducible scripts; retain biometric inputs privately.
 
-No raw benchmark results are included. Unit tests validate identity matching only; they do not validate model accuracy, audio latency, accessibility, or hardware reliability.
+No raw benchmark results are included. Automated tests cover identity matching, malformed galleries, CLI errors, and simulated camera cleanup/headless behavior. They do not validate model accuracy, audio latency, accessibility, or hardware reliability.

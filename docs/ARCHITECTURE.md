@@ -10,7 +10,7 @@ Inference applies the same color conversion and feature extraction. Euclidean ne
 
 One frame source serves both recognition and Pyzbar decoding. Camera capture and inference are synchronous. Only speech playback runs in a background thread, with a bounded queue and repeat cooldown. Slow vision processing can still reduce frame throughput; concurrency alone is not a latency guarantee.
 
-The application targets an OpenCV-compatible USB camera and a desktop display. Headless execution, CSI integration, GPIO proximity alerts, original GUI modes, email alerts, and semantic object detection are not implemented here.
+The application targets an OpenCV-compatible USB camera, with optional preview or `--headless` execution. A frame limit supports bounded smoke checks. CSI integration, GPIO proximity alerts, original GUI modes, email alerts, and semantic object detection are not implemented here.
 
 ## Report code issues addressed
 

@@ -1,6 +1,5 @@
 """Single-camera face and QR inference; reconstructed, hardware validation pending."""
 import argparse
-import json
 import logging
 import math
 import queue
@@ -10,6 +9,7 @@ import threading
 import time
 from pathlib import Path
 from .matching import match_identity
+from .gallery import load_gallery
 
 
 def speech_worker(events, executable):
@@ -28,27 +28,32 @@ def speech_worker(events, executable):
 
 
 def main():
-    import cv2
-    import face_recognition
-    from pyzbar.pyzbar import decode
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--gallery", type=Path, required=True)
     parser.add_argument("--camera", type=int, default=0)
     parser.add_argument("--threshold", type=float, default=0.6)
     parser.add_argument("--cooldown", type=float, default=5.0)
     parser.add_argument("--speak", action="store_true")
+    parser.add_argument("--headless", action="store_true", help="disable the preview window; stop with Ctrl+C")
+    parser.add_argument("--max-frames", type=int, default=0, help="stop after N frames; 0 runs continuously")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
     if not math.isfinite(args.threshold) or args.threshold <= 0:
         parser.error("threshold must be finite and positive")
     if not math.isfinite(args.cooldown) or args.cooldown < 0:
         parser.error("cooldown must be finite and nonnegative")
-    gallery = json.loads(args.gallery.read_text(encoding="utf-8"))
-    records = gallery["records"]
-    if gallery.get("schema_version") != 1 or not records:
-        parser.error("expected a nonempty schema version 1 gallery")
-    match_identity([0.0] * 128, records, args.threshold)
+    if args.max_frames < 0 or args.camera < 0:
+        parser.error("camera and max-frames must be nonnegative")
+    try:
+        records = load_gallery(args.gallery)
+    except ValueError as error:
+        parser.error(str(error))
+    try:
+        import cv2
+        import face_recognition
+        from pyzbar.pyzbar import decode
+    except ImportError as error:
+        parser.error(f"vision dependencies unavailable: {error}. Install the vision extra and ZBar.")
     executable = shutil.which("espeak") if args.speak else None
     if args.speak and executable is None:
         parser.error("eSpeak executable not found")
@@ -56,28 +61,30 @@ def main():
     worker = None
     if executable:
         worker = threading.Thread(target=speech_worker, args=(events, executable), daemon=True)
-        worker.start()
     last_spoken = {}
 
     def announce(key, message):
         now = time.monotonic()
         if now - last_spoken.get(key, -math.inf) < args.cooldown:
             return
+        if executable:
+            try:
+                events.put_nowait(message)
+            except queue.Full:
+                logging.debug("Speech queue full; dropped announcement")
+                return
         last_spoken[key] = now
         if len(last_spoken) > 256:
             oldest = min(last_spoken, key=last_spoken.get)
             del last_spoken[oldest]
         logging.info("%s", message)
-        if executable:
-            try:
-                events.put_nowait(message)
-            except queue.Full:
-                logging.debug("Speech queue full; dropped stale announcement")
-
     camera = cv2.VideoCapture(args.camera)
     try:
         if not camera.isOpened():
             raise RuntimeError("camera could not be opened")
+        if worker:
+            worker.start()
+        processed = 0
         while True:
             ok, frame = camera.read()
             if not ok:
@@ -97,13 +104,25 @@ def main():
                 payload = barcode.data.decode("utf-8", errors="replace")[:300]
                 payload = " ".join(payload.split())
                 announce(("code", payload), f"Code reads: {payload}")
-            cv2.imshow("Assistive Vision", frame)
-            if cv2.waitKey(1) & 0xFF == ord("q"):
+            processed += 1
+            if not args.headless:
+                cv2.imshow("Assistive Vision", frame)
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+            if args.max_frames and processed >= args.max_frames:
                 break
+    except KeyboardInterrupt:
+        logging.info("Stopped by user")
+    except (RuntimeError, cv2.error) as error:
+        parser.error(str(error))
     finally:
         camera.release()
-        cv2.destroyAllWindows()
-        if worker:
+        if not args.headless:
+            try:
+                cv2.destroyAllWindows()
+            except cv2.error:
+                logging.debug("Preview cleanup unavailable")
+        if worker and worker.ident is not None:
             # Drop queued stale messages and request worker shutdown.
             while True:
                 try:
