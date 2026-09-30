@@ -33,7 +33,7 @@ This is pretrained representation learning plus identity enrollment, not trainin
 
 ### Project block diagram
 
-![Smart glasses system block diagram showing camera-based face recognition and QR decoding, ultrasonic distance detection, and text-to-speech feedback](docs/assets/system-block-diagram-dark.svg)
+![Smart glasses system block diagram showing camera-based face recognition and QR decoding, ultrasonic distance detection, and text-to-speech feedback](docs/assets/system-block-diagram-dark-corrected.svg)
 
 *Dark vector rendering of the team-supplied project block diagram. The "Object Detection" branch represents ultrasonic obstacle/proximity detection; it does not depict a semantic object classification model. Sensor integration remains pending in the reconstructed code. [Original diagram](docs/assets/system-block-diagram.png).*
 

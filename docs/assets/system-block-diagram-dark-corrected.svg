@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="950" viewBox="0 0 1000 950" role="img" aria-labelledby="title desc">
+  <title id="title">Smart glasses system block diagram</title>
+  <desc id="desc">Camera data supports face recognition and QR decoding. An ultrasonic sensor measures obstacle distance. Identity, QR information, and obstacle alerts feed text-to-speech output.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#cbd5e1"/></marker>
+    <style>
+      .box {fill:#182331;stroke:#94a3b8;stroke-width:1.6}
+      .line {fill:none;stroke:#cbd5e1;stroke-width:1.7;marker-end:url(#arrow)}
+      text {fill:#f1f5f9;font-family:Arial,Helvetica,sans-serif;font-size:16px;text-anchor:middle}
+      .label {fill:#cbd5e1;font-size:14px}
+    </style>
+  </defs>
+  <rect width="1000" height="950" fill="#0d1117"/>
+  <path class="line" d="M410 65H180V155"/>
+  <path class="line" d="M500 95V155"/>
+  <path class="line" d="M590 65H820V155"/>
+  <path class="line" d="M270 185H410V285"/>
+  <path class="line" d="M500 215V250H410V285"/>
+  <path class="line" d="M410 355V400H180V435"/>
+  <path class="line" d="M410 355V400H500V435"/>
+  <path class="line" d="M820 215V285"/>
+  <path class="line" d="M820 355V435"/>
+  <path class="line" d="M180 505V605"/>
+  <path class="line" d="M500 505V605"/>
+  <path class="line" d="M820 505V605"/>
+  <path class="line" d="M180 675V775H370V835"/>
+  <path class="line" d="M500 675V775H450V835"/>
+  <path class="line" d="M820 675V870H500"/>
+  <rect class="box" x="410" y="35" width="180" height="60" rx="8"/>
+  <text x="500" y="71">Smart Glasses</text>
+  <rect class="box" x="90" y="155" width="180" height="60" rx="8"/>
+  <text x="180" y="191">Face Recognition</text>
+  <rect class="box" x="410" y="155" width="180" height="60" rx="8"/>
+  <text x="500" y="191">QR Code Scanning</text>
+  <rect class="box" x="730" y="155" width="180" height="60" rx="8"/>
+  <text x="820" y="191">Object Detection</text>
+  <rect class="box" x="320" y="285" width="180" height="70" rx="8"/>
+  <text x="410" y="315"><tspan x="410">Raspberry Pi</tspan><tspan x="410" dy="23">Camera</tspan></text>
+  <rect class="box" x="730" y="285" width="180" height="70" rx="8"/>
+  <text x="820" y="326">Ultrasonic Sensor</text>
+  <text class="label" x="448" y="381">Data</text>
+  <rect class="box" x="90" y="435" width="180" height="70" rx="8"/>
+  <text x="180" y="465"><tspan x="180">OpenCV</tspan><tspan x="180" dy="23">Face Recognition</tspan></text>
+  <rect class="box" x="410" y="435" width="180" height="70" rx="8"/>
+  <text x="500" y="476">Pyzbar</text>
+  <rect class="box" x="730" y="435" width="180" height="70" rx="8"/>
+  <text x="820" y="476">Distance Detection</text>
+  <text class="label" x="250" y="558">Face Detection</text>
+  <text class="label" x="579" y="558">QR Code Reading</text>
+  <rect class="box" x="90" y="605" width="180" height="70" rx="8"/>
+  <text x="180" y="635"><tspan x="180">Match Face with</tspan><tspan x="180" dy="23">Dataset</tspan></text>
+  <rect class="box" x="410" y="605" width="180" height="70" rx="8"/>
+  <text x="500" y="646">Identified QR Code</text>
+  <rect class="box" x="730" y="605" width="180" height="70" rx="8"/>
+  <text x="820" y="635"><tspan x="820">Distance Below</tspan><tspan x="820" dy="23">Alert Threshold?</tspan></text>
+  <text class="label" x="280" y="725"><tspan x="280">Speak Matching</tspan><tspan x="280" dy="20">Person's Name</tspan></text>
+  <text class="label" x="600" y="725"><tspan x="600">Speak Information</tspan><tspan x="600" dy="20">Stored in QR Code</tspan></text>
+  <text class="label" x="663" y="850">Speak "Obstacle Detected"</text>
+  <rect class="box" x="320" y="835" width="180" height="70" rx="8"/>
+  <text x="410" y="876">Text to Speech</text>
+</svg>
