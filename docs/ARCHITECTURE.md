@@ -1,5 +1,11 @@
 # Architecture and implementation decisions
 
+## Original project block diagram
+
+![Camera, face recognition, QR decoding, ultrasonic distance detection, and speech output in the smart glasses system](assets/system-block-diagram.png)
+
+The team-supplied diagram documents the academic system design. Its "Object Detection" branch uses an ultrasonic sensor to trigger proximity alerts. The reference implementation below covers camera-based recognition and decoding; the sensor adapter is still pending.
+
 ## ML pipeline
 
 Enrollment decodes a private image, converts OpenCV BGR to RGB, detects exactly one face with the HOG backend, and extracts a 128-value pretrained dlib embedding. A JSON gallery maps vectors to identity labels. JSON replaces the report's pickle format to avoid executable deserialization of model metadata.

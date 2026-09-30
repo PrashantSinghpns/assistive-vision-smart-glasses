@@ -31,6 +31,14 @@ This is pretrained representation learning plus identity enrollment, not trainin
 
 ## Architecture
 
+### Project block diagram
+
+![Smart glasses system block diagram showing camera-based face recognition and QR decoding, ultrasonic distance detection, and text-to-speech feedback](docs/assets/system-block-diagram.png)
+
+*Original project block diagram supplied by the project team. The "Object Detection" branch represents ultrasonic obstacle/proximity detection; it does not depict a semantic object classification model. Sensor integration remains pending in the reconstructed code.*
+
+### Reference implementation flow
+
 ```mermaid
 flowchart TD
     Camera["Camera frames"] --> Preprocess["Resize and BGR to RGB"]
