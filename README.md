@@ -11,6 +11,8 @@ Academic project by **Prashant Singh, Rishabh Raj, and Vardaan Sharma**, supervi
 ## Overview
 
 The prototype translates visual and proximity information into audio cues for people with visual impairments. Its machine learning component uses pretrained dlib facial embeddings to identify enrolled individuals. QR decoding and ultrasonic ranging complement the vision pipeline.
+<img width="597" height="174" alt="Screenshot 2026-09-30 150036" src="https://github.com/user-attachments/assets/8f33edeb-df35-49b7-aeaf-a60472782305" />
+
 
 ## Technical capabilities
 
