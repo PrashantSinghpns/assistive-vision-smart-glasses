@@ -61,7 +61,8 @@ The reconstructed application uses one camera stream and shares frames between f
 - `src/assistive_vision/app.py`: live camera inference and optional offline speech.
 - `src/assistive_vision/matching.py`: identity selection and distance threshold rejection.
 - `src/assistive_vision/gallery.py`: gallery schema and biometric vector validation.
-- `tests/`: matching, gallery validation, CLI, and simulated camera lifecycle checks.
+- `src/assistive_vision/evaluate.py`: held-out identity and unknown-rejection evaluation.
+- `tests/`: matching, evaluation, gallery validation, CLI, and simulated camera lifecycle checks.
 - `docs/`: architecture, evaluation protocol, hardware integration, and source traceability.
 - `.github/workflows/ci.yml`: syntax and dependency-free unit checks.
 
@@ -135,3 +136,14 @@ This is an academic assistive prototype; obstacle cues do not establish navigati
 ## Attribution and licensing
 
 Credit the complete project team above. Individual contribution boundaries are not established by the supplied documents. No software license has been assigned pending confirmation of team ownership and preferred terms. The private source PDFs are omitted from the public package because they contain personal information.
+
+
+## Evaluate identity matching
+
+Use a private query JSON array with `expected` (an enrolled name or exactly `Unknown`) and a finite 128-value `embedding` for each held-out face. Generate query embeddings from different capture sessions than enrollment. Keep both images and embeddings private.
+
+```bash
+python -m assistive_vision.evaluate --gallery models/identities.json --queries data/held_out_queries.json --threshold 0.6 --output outputs/matching_metrics.json
+```
+
+The report separates known-identity accuracy, wrong known identities, known rejection, and unknown false acceptance. Rates use their respective known/unknown denominators; a missing population is reported as null, not zero errors. The evaluator measures embedding matching only, not face detection, QR success, sensor safety, or end-to-end latency. Calibrate thresholds on a separate validation population and report final scores on an untouched test population.

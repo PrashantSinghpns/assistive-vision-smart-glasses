@@ -24,3 +24,8 @@ The report also discusses 85% confidence and 60–70% thresholds. Its provided e
 7. Publish aggregate results and reproducible scripts; retain biometric inputs privately.
 
 No raw benchmark results are included. Automated tests cover identity matching, malformed galleries, CLI errors, and simulated camera cleanup/headless behavior. They do not validate model accuracy, audio latency, accessibility, or hardware reliability.
+
+
+## Runnable matching evaluator
+
+The `python -m assistive_vision.evaluate` command implements the identity-matching portion of this protocol. See the README for its query contract. It reports aggregate counts only and does not export biometric vectors. Hardware measurements and representative evaluation datasets remain necessary.

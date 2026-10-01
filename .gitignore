@@ -8,3 +8,5 @@ data/*
 models/*
 !models/README.md
 output/
+outputs/
+.pytest_cache/
