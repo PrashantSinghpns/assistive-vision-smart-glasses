@@ -1,4 +1,4 @@
-# Assistive Vision Smart Glasses
+# AI Assistive Vision Smart Glasses
 
 [![Reference checks](https://github.com/PrashantSinghpns/assistive-vision-smart-glasses/actions/workflows/ci.yml/badge.svg)](https://github.com/PrashantSinghpns/assistive-vision-smart-glasses/actions/workflows/ci.yml)
 
